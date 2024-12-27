@@ -11,9 +11,7 @@ namespace PieShop.DataAccess.Repositories
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PieShopContext _pieShopContext;
 
-        public string? ShoppingCartId { get; set; }
-
-        public List<ShoppingCartItemModel.ShoppingCartItem> ShoppingCartItems { get; set; } = default!;
+        private string? ShoppingCartId { get; set; }
 
         public ShoppingCartRepository(PieShopContext pieShopContext, IHttpContextAccessor httpContextAccessor)
         {

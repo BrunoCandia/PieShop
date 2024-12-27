@@ -8,12 +8,12 @@ namespace PieShop.BusinessLogic
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
 
-        public List<ShoppingCartItem> ShoppingCartItems { get; set; } = default!;
-
         public ShoppingCartService(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
         }
+
+        //TODO: add bussiness logic
 
         public async Task AddToCartAsync(Pie pie)
         {

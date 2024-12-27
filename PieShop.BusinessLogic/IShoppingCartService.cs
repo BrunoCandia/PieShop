@@ -10,6 +10,5 @@ namespace PieShop.BusinessLogic
         Task<List<ShoppingCartItem>> GetShoppingCartItemsAsync();
         Task ClearCartAsync();
         Task<decimal> GetShoppingCartTotalAsync();
-        List<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

@@ -13,63 +13,6 @@ namespace PieShop.DataAccess.Repositories
             _pieShopContext = pieShopContext;
         }
 
-        public IEnumerable<Pie> AllPies
-        {
-            get
-            {
-                return _pieShopContext.Pie
-                    .Include(c => c.Category)
-                    .Select(pie => new Pie
-                    {
-                        PieId = pie.PieId,
-                        Name = pie.Name,
-                        ShortDescription = pie.ShortDescription,
-                        LongDescription = pie.LongDescription,
-                        AllergyInformation = pie.AllergyInformation,
-                        Price = pie.Price,
-                        ImageThumbnailUrl = pie.ImageThumbnailUrl,
-                        IsPieOfTheWeek = pie.IsPieOfTheWeek,
-                        IsInStock = pie.IsInStock,
-                        CategoryId = pie.CategoryId,
-                        Category = new Category
-                        {
-                            CategoryId = pie.Category.CategoryId,
-                            Name = pie.Category.Name,
-                            Description = pie.Category.Description
-                        }
-                    });
-            }
-        }
-
-        public IEnumerable<Pie> PiesOfTheWeek
-        {
-            get
-            {
-                return _pieShopContext.Pie
-                    .Include(c => c.Category)
-                    .Where(pie => pie.IsPieOfTheWeek)
-                    .Select(pie => new Pie
-                    {
-                        PieId = pie.PieId,
-                        Name = pie.Name,
-                        ShortDescription = pie.ShortDescription,
-                        LongDescription = pie.LongDescription,
-                        AllergyInformation = pie.AllergyInformation,
-                        Price = pie.Price,
-                        ImageThumbnailUrl = pie.ImageThumbnailUrl,
-                        IsPieOfTheWeek = pie.IsPieOfTheWeek,
-                        IsInStock = pie.IsInStock,
-                        CategoryId = pie.CategoryId,
-                        Category = new Category
-                        {
-                            CategoryId = pie.Category.CategoryId,
-                            Name = pie.Category.Name,
-                            Description = pie.Category.Description
-                        }
-                    });
-            }
-        }
-
         public async Task<Pie?> GetPieByPieIdAsync(Guid pieId)
         {
             return await _pieShopContext.Pie
