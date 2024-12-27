@@ -16,7 +16,7 @@ namespace PieShop.DataAccess.Repositories
 
         public async Task CreateOrderAsync(OrderModel.Order order)
         {
-            // TODO: review to the async
+            // TODO: review https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues
             var shoppingCartItems = await _shopCartRepository.GetShoppingCartItemsAsync();
             var shoppingCartTotal = await _shopCartRepository.GetShoppingCartTotalAsync();
 
@@ -44,18 +44,37 @@ namespace PieShop.DataAccess.Repositories
                 ////}).ToList()
             };
 
+            // This works fine
+            ////foreach (var item in shoppingCartItems)
+            ////{
+            ////    var orderDetail = new OrderDetail
+            ////    {
+            ////        Amount = item.Amount,
+            ////        PieId = item.PieId,
+            ////        Price = item.Pie.Price,
+            ////    };
+
+            ////    orderEntity.OrderDetails.Add(orderDetail);
+            ////}
+
+            ////The orderEntity needs to be assigned when adding a list or we will get the error below
+            ////The MERGE statement conflicted with the FOREIGN KEY constraint "FK_OrderDetail_Order_OrderId". The conflict occurred in database "PieShop", table "dbo.Order", column 'OrderId'.
+            var orderDetailList = new List<OrderDetail>();
+
             foreach (var item in shoppingCartItems)
             {
-                // TODO: create a list and add the range
                 var orderDetail = new OrderDetail
                 {
                     Amount = item.Amount,
                     PieId = item.PieId,
                     Price = item.Pie.Price,
+                    Order = orderEntity,
                 };
 
-                orderEntity.OrderDetails.Add(orderDetail);
+                orderDetailList.Add(orderDetail);
             }
+
+            await _pieShopContext.OrderDetail.AddRangeAsync(orderDetailList);
 
             await _pieShopContext.Order.AddAsync(orderEntity);
 

@@ -17,7 +17,7 @@ namespace PieShop.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // TODO: review to the async
+            // TODO: review https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues
             var items = await _shoppingCartService.GetShoppingCartItemsAsync();
             var total = await _shoppingCartService.GetShoppingCartTotalAsync();
 
