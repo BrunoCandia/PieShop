@@ -1,0 +1,54 @@
+﻿@model PieSearchViewModel
+
+@{
+    ViewData["Title"] = "Search Pies";
+    bool searchPerformed = ViewData["SearchPerformed"] != null && (bool)ViewData["SearchPerformed"];
+    string searchQuery = ViewData["CurrentFilter"] as string;
+}
+
+<br />
+<br />
+<br />
+<br />
+Enter your search query:
+<form asp-action="Search" method="get">
+    <input type="text" name="searchQuery" value="@searchQuery" placeholder="Type for search" />
+    <input type="submit" value="Search" />
+</form>
+<br />
+
+@if (!string.IsNullOrWhiteSpace(ViewData["ErrorMessage"] as string))
+{
+    <div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
+}
+
+@if (searchPerformed) {
+    @if (Model.Pies.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pie in Model.Pies)
+                {
+                    <tr>
+                        <td>@pie.Name</td>
+                        <td>@pie.Price</td>
+                        <td>
+                            <a asp-controller="Pie" asp-action="Detail" asp-route-pieId="@pie.PieId" class="pie-link">Detail</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No pies found.</p>
+    }
+}

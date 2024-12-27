@@ -1,0 +1,23 @@
+﻿@model Pie
+
+@* This is a shared component so we use the specific model defined in HomeViewModel and PieListViewModel in this case the Pie *@
+
+<div class="col">
+    <div class="card pie-card">
+        <img src="@Model.ImageThumbnailUrl" class="card-img-top" alt="@Model.Name">
+        <div class="card-body pie-button">
+            <h4 class="d-grid">
+                <a asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-pieId="@Model.PieId" class="btn btn-secondary">+ Add To Cart</a>
+            </h4>
+
+            <div class="d-flex justify-content-between mt-2">
+                <h2 class="text-start">
+                    <a asp-controller="Pie" asp-action="Detail" asp-route-pieId="@Model.PieId" class="pie-link">@Model.Name</a>
+                </h2>
+                <h5 class="text-nowrap">
+                    @Model.Price.ToString("c")
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
