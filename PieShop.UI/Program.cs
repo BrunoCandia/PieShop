@@ -12,6 +12,27 @@ builder.Services.AddControllersWithViews();
 // To use the pages realted to Identity (Login, Register) we need to add the service related to razor pages because they were done with Razor
 builder.Services.AddRazorPages();
 
+////builder.Services.AddOutputCache();
+////builder.Services.AddOutputCache(options =>
+////{
+////    options.AddPolicy("PieList", policy =>
+////    {
+////        policy.Expire(TimeSpan.FromSeconds(120));
+////        policy.SetVaryByRouteValue("category");
+////    });
+////    options.AddPolicy("PieDetail", policy =>
+////    {
+////        policy.Expire(TimeSpan.FromSeconds(120));
+////        policy.SetVaryByRouteValue("pieId");
+////    });
+////});
+
+builder.Services.AddOutputCache(options =>
+{
+    options.AddPolicy("PieList", policy => policy.SetVaryByRouteValue("category").Expire(TimeSpan.FromSeconds(60)));
+    options.AddPolicy("PieDetail", policy => policy.SetVaryByRouteValue("pieId").Expire(TimeSpan.FromSeconds(60)));
+});
+
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
@@ -46,6 +67,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseOutputCache();
 
 app.UseAuthentication();
 

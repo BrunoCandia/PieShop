@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using PieShop.BusinessLogic;
 using PieShop.Models.Pie;
 using PieShop.UI.Models;
@@ -25,8 +26,12 @@ namespace PieShop.UI.Controllers
         ////    return View(pieListViewModel);
         ////}
 
+        [OutputCache(PolicyName = "PieList")]
         public async Task<ViewResult> List(string category)
         {
+            // Test OutputCache
+            await Task.Delay(TimeSpan.FromSeconds(5));
+
             IEnumerable<Pie> pies;
             string? currentCategory;
 
@@ -47,8 +52,12 @@ namespace PieShop.UI.Controllers
             return View(new PieListViewModel(pies, currentCategory));
         }
 
+        [OutputCache(PolicyName = "PieDetail")]
         public async Task<ActionResult> Detail(Guid pieId)
         {
+            // Test OutputCache
+            await Task.Delay(TimeSpan.FromSeconds(5));
+
             if (pieId == Guid.Empty)
             {
                 return BadRequest();
