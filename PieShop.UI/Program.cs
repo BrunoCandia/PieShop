@@ -20,7 +20,7 @@ builder.Services.AddOutputCache(options =>
 
 builder.Services.AddStackExchangeRedisOutputCache(options =>
 {
-    options.Configuration = "localhost:53820"; // Update the value after running Redis with Podman
+    options.Configuration = "localhost:59163"; // Update the value after running Redis with Podman: Container image "docker.io/library/redis:7.4"
 });
 
 // https://redis.io/docs/latest/commands/command-getkeys/#:~:text=You%20can%20use%20COMMAND%20GETKEYS,how%20Redis%20parses%20the%20commands.
