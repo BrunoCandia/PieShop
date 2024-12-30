@@ -12,26 +12,19 @@ builder.Services.AddControllersWithViews();
 // To use the pages realted to Identity (Login, Register) we need to add the service related to razor pages because they were done with Razor
 builder.Services.AddRazorPages();
 
-////builder.Services.AddOutputCache();
-////builder.Services.AddOutputCache(options =>
-////{
-////    options.AddPolicy("PieList", policy =>
-////    {
-////        policy.Expire(TimeSpan.FromSeconds(120));
-////        policy.SetVaryByRouteValue("category");
-////    });
-////    options.AddPolicy("PieDetail", policy =>
-////    {
-////        policy.Expire(TimeSpan.FromSeconds(120));
-////        policy.SetVaryByRouteValue("pieId");
-////    });
-////});
-
 builder.Services.AddOutputCache(options =>
 {
     options.AddPolicy("PieList", policy => policy.SetVaryByRouteValue("category").Expire(TimeSpan.FromSeconds(60)));
     options.AddPolicy("PieDetail", policy => policy.SetVaryByRouteValue("pieId").Expire(TimeSpan.FromSeconds(60)));
 });
+
+builder.Services.AddStackExchangeRedisOutputCache(options =>
+{
+    options.Configuration = "localhost:53820"; // Update the value after running Redis with Podman
+});
+
+// https://redis.io/docs/latest/commands/command-getkeys/#:~:text=You%20can%20use%20COMMAND%20GETKEYS,how%20Redis%20parses%20the%20commands.
+// https://www.atlassian.com/data/admin/how-to-get-all-keys-in-redis
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
