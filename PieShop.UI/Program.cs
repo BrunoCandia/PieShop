@@ -23,6 +23,7 @@ builder.Services.AddStackExchangeRedisOutputCache(options =>
     options.Configuration = "localhost:59163"; // Update the value after running Redis with Podman: Container image "docker.io/library/redis:7.4"
 });
 
+// Cached responses are stored in Redis
 // https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-9.0
 // https://redis.io/docs/latest/commands/command-getkeys/#:~:text=You%20can%20use%20COMMAND%20GETKEYS,how%20Redis%20parses%20the%20commands.
 // https://www.atlassian.com/data/admin/how-to-get-all-keys-in-redis
