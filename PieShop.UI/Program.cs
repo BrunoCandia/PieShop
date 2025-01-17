@@ -33,9 +33,14 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<PieShopContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity will use Entity Framework
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<PieShopContext>();
+// Identity will use Entity Framework and adds authentication by default
+builder.Services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<PieShopContext>();
 ////builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PieShopContext>();
+
+builder.Services.AddAuthorization(policy =>
+{
+    policy.AddPolicy("IsAdministrator", policy => policy.RequireRole("Administrator"));
+});
 
 builder.Services.AddScoped<IPieRepository, PieRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -46,6 +51,7 @@ builder.Services.AddScoped<IPieService, PieService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 
