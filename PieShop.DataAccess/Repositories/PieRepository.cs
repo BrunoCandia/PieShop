@@ -2,6 +2,7 @@
 using PieShop.DataAccess.Extensions;
 using PieShop.Models.Shared;
 using CategoryModel = PieShop.Models.Category.Category;
+using IngredientModel = PieShop.Models.Pie.Ingredient;
 using PieEntity = PieShop.DataAccess.Data.Entitites.Pie.Pie;
 using PieModel = PieShop.Models.Pie.Pie;
 
@@ -320,6 +321,7 @@ namespace PieShop.DataAccess.Repositories
             return await _pieShopContext.Pie
                 .AsNoTracking()
                 .Include(c => c.Category)
+                .Include(i => i.Ingredients)
                 .Where(pie => pie.PieId == pieId)
                 .Select(pie => new PieModel
                 {
@@ -338,7 +340,13 @@ namespace PieShop.DataAccess.Repositories
                     {
                         CategoryId = pie.Category.CategoryId,
                         Name = pie.Category.Name
-                    }
+                    },
+                    Ingredients = pie.Ingredients.Select(i => new IngredientModel
+                    {
+                        IngredientId = i.IngredientId,
+                        Name = i.Name,
+                        Amount = i.Amount,
+                    }).ToList()
                 })
                 .FirstOrDefaultAsync();
         }
