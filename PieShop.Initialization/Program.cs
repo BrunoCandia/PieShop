@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PieShop.DataAccess;
 using PieShop.DataAccess.Data.Entitites.Category;
@@ -64,6 +65,8 @@ public static class Program
 
         await pieShopContext.Database.UseTransactionAsync(transaction);
 
+        await SeedBaseAdministratorUserAsync(pieShopContext);
+
         await SeedBaseAsync(pieShopContext);
 
         await pieShopContext.SaveChangesAsync();
@@ -110,5 +113,41 @@ public static class Program
         await pieShopContext.SaveChangesAsync();
 
         Console.WriteLine("Seeded data...");
+    }
+
+    private static async Task SeedBaseAdministratorUserAsync(PieShopContext pieShopContext)
+    {
+        if (!await pieShopContext.Roles.AnyAsync(r => r.Name == "Administrator"))
+        {
+            await pieShopContext.Roles.AddAsync(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
+            await pieShopContext.SaveChangesAsync();
+        }
+
+        if (!await pieShopContext.Users.AnyAsync(u => u.UserName == "admin-user@gmail.com"))
+        {
+            var adminUser = new IdentityUser
+            {
+                UserName = "admin-user@gmail.com",
+                NormalizedUserName = "ADMIN-USER@GMAIL.COM",
+                Email = "admin-user@gmail.com",
+                NormalizedEmail = "ADMIN-USER@GMAIL.COM",
+                EmailConfirmed = false
+            };
+
+            var passwordHasher = new PasswordHasher<IdentityUser>();
+            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin@12345");
+
+            await pieShopContext.Users.AddAsync(adminUser);
+            await pieShopContext.SaveChangesAsync();
+        }
+
+        var user = await pieShopContext.Users.FirstOrDefaultAsync(u => u.UserName == "admin-user@gmail.com");
+        var role = await pieShopContext.Roles.FirstOrDefaultAsync(r => r.Name == "Administrator");
+
+        if (user != null && role != null && !await pieShopContext.UserRoles.AnyAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id))
+        {
+            await pieShopContext.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
+            await pieShopContext.SaveChangesAsync();
+        }
     }
 }
