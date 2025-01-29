@@ -123,14 +123,14 @@ public static class Program
             await pieShopContext.SaveChangesAsync();
         }
 
-        if (!await pieShopContext.Users.AnyAsync(u => u.UserName == "admin-user@gmail.com"))
+        if (!await pieShopContext.Users.AnyAsync(u => u.UserName == "admin_user@gmail.com"))
         {
             var adminUser = new IdentityUser
             {
-                UserName = "admin-user@gmail.com",
-                NormalizedUserName = "ADMIN-USER@GMAIL.COM",
-                Email = "admin-user@gmail.com",
-                NormalizedEmail = "ADMIN-USER@GMAIL.COM",
+                UserName = "admin_user@gmail.com",
+                NormalizedUserName = "ADMIN_USER@GMAIL.COM",
+                Email = "admin_user@gmail.com",
+                NormalizedEmail = "ADMIN_USER@GMAIL.COM",
                 EmailConfirmed = false
             };
 
@@ -141,7 +141,7 @@ public static class Program
             await pieShopContext.SaveChangesAsync();
         }
 
-        var user = await pieShopContext.Users.FirstOrDefaultAsync(u => u.UserName == "admin-user@gmail.com");
+        var user = await pieShopContext.Users.FirstOrDefaultAsync(u => u.UserName == "admin_user@gmail.com");
         var role = await pieShopContext.Roles.FirstOrDefaultAsync(r => r.Name == "Administrator");
 
         if (user != null && role != null && !await pieShopContext.UserRoles.AnyAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id))
