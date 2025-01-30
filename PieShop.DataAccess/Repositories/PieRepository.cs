@@ -40,7 +40,8 @@ namespace PieShop.DataAccess.Repositories
                     {
                         CategoryId = pie.Category.CategoryId,
                         Name = pie.Category.Name
-                    }
+                    },
+                    RowVersion = pie.RowVersion
                 })
                 .FirstOrDefaultAsync();
         }
