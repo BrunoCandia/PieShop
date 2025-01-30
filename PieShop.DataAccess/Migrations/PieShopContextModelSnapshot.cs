@@ -335,6 +335,33 @@ namespace PieShop.DataAccess.Migrations
                     b.ToTable("OrderDetail");
                 });
 
+            modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Pie.Ingredient", b =>
+                {
+                    b.Property<Guid>("IngredientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<string>("Amount")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("PieId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("IngredientId");
+
+                    b.HasIndex("PieId");
+
+                    b.ToTable("Ingredient");
+                });
+
             modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Pie.Pie", b =>
                 {
                     b.Property<Guid>("PieId")
@@ -374,6 +401,12 @@ namespace PieShop.DataAccess.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(255)
@@ -480,6 +513,13 @@ namespace PieShop.DataAccess.Migrations
                     b.Navigation("Pie");
                 });
 
+            modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Pie.Ingredient", b =>
+                {
+                    b.HasOne("PieShop.DataAccess.Data.Entitites.Pie.Pie", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("PieId");
+                });
+
             modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Pie.Pie", b =>
                 {
                     b.HasOne("PieShop.DataAccess.Data.Entitites.Category.Category", "Category")
@@ -510,6 +550,11 @@ namespace PieShop.DataAccess.Migrations
             modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Order.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("PieShop.DataAccess.Data.Entitites.Pie.Pie", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }
